@@ -1,5 +1,7 @@
 package com.example.iosegnalo.Model;
 
+import android.util.Log;
+
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -118,6 +120,26 @@ public class Sistema {
 
     public Utente getUtente(){
         return Cittadino;
+    }
+
+    public boolean verificaModificaSegnalazioni()
+    {
+        ArrayList<Segnalazione> NuovaListaSegnalazioni = new ArrayList<Segnalazione>();
+        Sistema sys = Sistema.getIstance();
+        NuovaListaSegnalazioni.clear();
+        NuovaListaSegnalazioni = (ArrayList<Segnalazione>) sys.getSegnalazioniCittadino(Cittadino.getId()).clone();
+        int i;
+        //Log.d("myapp","Dim1: "+ ListaSegnalazioni.size() + "Dim2: " + NuovaListaSegnalazioni.size());
+
+        for(i=0;i<NuovaListaSegnalazioni.size();i++) {
+            //Log.d("myapp","(vecchia): "+ListaSegnalazioni.get(i).getDataModifica().toString() + "(nuova): "+NuovaListaSegnalazioni.get(i).getDataModifica().toString());
+
+            if (NuovaListaSegnalazioni.get(i).getDataModifica().compareTo(ListaSegnalazioni.get(i).getDataModifica()) != 0) {
+                ListaSegnalazioni= (ArrayList<Segnalazione>) NuovaListaSegnalazioni.clone();
+                return true;
+            }
+        }
+        return false;
     }
 
 }

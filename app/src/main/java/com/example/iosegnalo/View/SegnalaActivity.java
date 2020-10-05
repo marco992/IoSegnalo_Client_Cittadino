@@ -140,12 +140,12 @@ public class SegnalaActivity extends AppCompatActivity implements SegnalaView {
         mappa = findViewById(R.id.mapView);
         mappa.onCreate(savedInstanceState);
 
-        Presenter = new SegnalaActivityPresenter(this);
-
         //codice per rilevare la posizione GPS del dispositivo
         LocationManager locationmanager = (LocationManager)
                 getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationlistener = new MyLocationListener();
+
+        Presenter = new SegnalaActivityPresenter(this);
 
         Presenter.controlloPermessi(getApplicationContext(), locationmanager, locationlistener);
 

@@ -24,11 +24,7 @@ public class ProxyComunicazione implements Comunicazione {
             int i;
             //Messaggio= (ArrayList) Richiesta.clone();
             for(i=0;i<Richiesta.size();i++) {
-                Log.d("myapp","Mex:"+Richiesta.get(i).toString());
-
                 Mess.add(Richiesta.get(i).toString());
-                Log.d("myapp","Mex2:"+Mess.get(i).toString());
-
             }
             realComunicazione = new RealComunicazione();
             realComunicazione.avviaComunicazione(Mess);
@@ -42,15 +38,13 @@ public class ProxyComunicazione implements Comunicazione {
         else
         {
             int i;
-            if(Integer.parseInt(NuovaRichiesta.get(0).toString())==1){
-                Log.d("myapp","Sono entrato nella backdoor!!!");
+            if((Integer.parseInt(NuovaRichiesta.get(0).toString())==1) || (Integer.parseInt(NuovaRichiesta.get(0).toString())==4)){
                 //backdoor per consentire al client di poter inviare piu richieste (uguali) di visualizzazione delle segnalazioni
                 return false;
             }
             for (i=0;i<NuovaRichiesta.size();i++){
                 if(VecchiaRichiesta.get(i).toString().compareTo(NuovaRichiesta.get(i).toString())!=0){
-                    Log.d("myapp","Stringa1(vecchia): "+VecchiaRichiesta.get(i).toString() + "Stringa2(nuova): "+NuovaRichiesta.get(i).toString());
-                    return false;
+                   return false;
                 }
             }
         }

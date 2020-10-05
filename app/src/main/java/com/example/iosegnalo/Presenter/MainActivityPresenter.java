@@ -1,6 +1,7 @@
 package com.example.iosegnalo.Presenter;
 
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.iosegnalo.View.MainView;
 import com.example.iosegnalo.Model.Sistema;

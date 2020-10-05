@@ -34,60 +34,26 @@ public class RealComunicazione implements Comunicazione {
                 SocketAddress sockaddr = new InetSocketAddress(SERVER_IP, SERVER_PORT);
                 Socket socket = new Socket();
                 socket.connect(sockaddr, 10000);
-                //socket = new Socket(SERVER_IP, SERVER_PORT);
                 OutputStream OutStream = socket.getOutputStream();
                 objectOutputStream = new ObjectOutputStream(OutStream);
                 InStream = socket.getInputStream();
                 inputO = new ObjectInputStream(InStream);
-                tipoRichiesta=Integer.parseInt(Messaggio.get(0).toString());
-                switch(tipoRichiesta)
-                {
-                    case 0:
-                        //richiesta di login
-                        objectOutputStream.writeObject(Messaggio);
-                        break;
-                    case 1:
-                        //richiesta di visualizzazione segnalazioni cittadino
-                        objectOutputStream.writeObject(Messaggio);
-                    break;
-                    case 2:
-                        //richiesta di aggiunta nuova segnalazione
-                        objectOutputStream.writeObject(Messaggio);
-                        break;
-                }
-
+                objectOutputStream.writeObject(Messaggio);
                 String tipoRisposta = new String();
                 ArrayList messaggioIN = new ArrayList();
                 messaggioIN = new ArrayList( (ArrayList) inputO.readObject());
                 tipoRisposta = messaggioIN.get(0).toString();
-
-                if (tipoRisposta != null) {
-                    //verifico il primo elemento dell'arraylist per distinguere i vari messaggi
-                    switch (tipoRisposta) {
-                        case "0":
-                            Messaggio.clear();
-                            Messaggio.add(messaggioIN.get(1).toString());
-                            Messaggio.add(messaggioIN.get(2).toString());
-                            break;
-                        case "1":
-                            Messaggio.clear();
-                            int i;
-                            for(i=1;i<messaggioIN.size();i++)
-                            {
-                                Messaggio.add(messaggioIN.get(i).toString());
-                            }
-                            break;
-                        case "2":
-                            Messaggio.clear();
-                            Messaggio.add(messaggioIN.get(1).toString());
-                        break;
-                    }
+                Messaggio.clear();
+                int i;
+                for(i=1;i<messaggioIN.size();i++)
+                {
+                    Messaggio.add(messaggioIN.get(i).toString());
                 }
                 objectOutputStream.close();
                 inputO.close();
                 socket.close();
             } catch (Exception ex) {
-                Log.d("iosegnalo","Errore!");
+                Log.d("IoSegnalo_App","Errore di comunicazione!");
             }
         }
     }
