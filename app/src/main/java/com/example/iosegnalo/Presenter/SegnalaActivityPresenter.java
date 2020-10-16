@@ -15,13 +15,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.iosegnalo.Model.Sistema;
+import com.example.iosegnalo.Model.Archivio;
 import com.example.iosegnalo.Model.Utente;
 import com.example.iosegnalo.View.SegnalaView;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +34,7 @@ public class SegnalaActivityPresenter {
     public SegnalaActivityPresenter(SegnalaView view)
     {
         View = view;
-        Sistema sys = Sistema.getIstance();
+        Archivio sys = Archivio.getIstance();
         Cittadino = sys.getUtente();
         ArrayList ListaTipologie = new ArrayList();
         ListaTipologie.add("Illuminazione pubblica");
@@ -87,7 +84,7 @@ public class SegnalaActivityPresenter {
         boolean Errore;
         Errore=controlloErroriInput(Descrizione, Recapito);
         if(Errore==false) {
-            Sistema sys = Sistema.getIstance();
+            Archivio sys = Archivio.getIstance();
             int risposta;
             risposta = sys.inserisciSegnalazione(Tipologia, Descrizione, Cittadino.getId(), Latitudine, Longitudine, Recapito);
             if (risposta == 1) {

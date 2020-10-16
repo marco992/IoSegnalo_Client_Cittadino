@@ -5,22 +5,27 @@ import android.util.Log;
 import java.sql.Date;
 import java.util.ArrayList;
 
-public class Sistema {
-    private static Sistema istance=null;
+public class Archivio {
+    private static Archivio istance=null;
     ArrayList<Segnalazione> ListaSegnalazioni = new ArrayList<Segnalazione>();
     Utente Cittadino;
     private static Comunicazione com;
 
-    public static Sistema getIstance() {
+    public static Archivio getIstance() {
         if(istance==null)
-            istance = new Sistema();
+            istance = new Archivio();
         return istance;
     }
 
-    public Sistema()
+    public Archivio()
     {
         ListaSegnalazioni=new ArrayList<Segnalazione>();
         com = new ProxyComunicazione();
+    }
+
+    public void updateListaSegnalazioni(int IDCittadino)
+    {
+        ListaSegnalazioni= (ArrayList<Segnalazione>) getSegnalazioniCittadino(IDCittadino).clone();
     }
 
     public int inserisciSegnalazione(int Tipologia, String Descrizione, int IDUtente, Double latitudine, Double Longitudine, String Recapito)
@@ -75,22 +80,22 @@ public class Sistema {
         richiesta.add(IDUtente);
         com.avviaComunicazione(richiesta);
         risposta = com.getRisposta();
-        ListaSegnalazioni.clear();
+        ArrayList<Segnalazione> ListaSegnalazioniTemp=new ArrayList<Segnalazione>();
         int i;
-        for(i=0;i<risposta.size();i=i+5) {
+        for(i=0;i<risposta.size();i=i+6) {
             Segnalazione s = new Segnalazione();
             s.setId(Integer.parseInt(risposta.get(i).toString()));
-            //s.getDescrizione();
-            s.setDataModifica(Date.valueOf(risposta.get(i+3).toString()));
+            s.setDescrizione(risposta.get(i+1).toString());
+            s.setDataModifica(Date.valueOf(risposta.get(i+4).toString()));
             //s.setIDcittadino();
-            s.setLatitudine(Double.parseDouble(risposta.get(i+1).toString()));
-            s.setLongitudine(Double.parseDouble(risposta.get(i+2).toString()));
+            s.setLatitudine(Double.parseDouble(risposta.get(i+2).toString()));
+            s.setLongitudine(Double.parseDouble(risposta.get(i+3).toString()));
             //s.getNota();
             //s.getRecapito();
-            s.setStato(Integer.parseInt(risposta.get(i+4).toString()));
-            ListaSegnalazioni.add(s);
+            s.setStato(Integer.parseInt(risposta.get(i+5).toString()));
+            ListaSegnalazioniTemp.add(s);
         }
-        return ListaSegnalazioni;
+        return ListaSegnalazioniTemp;
     }
 
     public ArrayList<Segnalazione> getSegnalazioni()
@@ -102,17 +107,17 @@ public class Sistema {
         risposta = com.getRisposta();
 
         int i;
-        for(i=0;i<risposta.size();i=i+5) {
+        for(i=0;i<risposta.size();i=i+6) {
             Segnalazione s = new Segnalazione();
             s.setId(Integer.parseInt(risposta.get(i).toString()));
-            //s.getDescrizione();
-            s.setDataModifica(Date.valueOf(risposta.get(i+3).toString()));
+            s.setDescrizione(risposta.get(i+1).toString());
+            s.setDataModifica(Date.valueOf(risposta.get(i+4).toString()));
             //s.setIDcittadino();
-            s.setLatitudine(Double.parseDouble(risposta.get(i+1).toString()));
-            s.setLongitudine(Double.parseDouble(risposta.get(i+2).toString()));
+            s.setLatitudine(Double.parseDouble(risposta.get(i+2).toString()));
+            s.setLongitudine(Double.parseDouble(risposta.get(i+3).toString()));
             //s.getNota();
             //s.getRecapito();
-            s.setStato(Integer.parseInt(risposta.get(i+4).toString()));
+            s.setStato(Integer.parseInt(risposta.get(i+5).toString()));
             ListaSegnalazioni.add(s);
         }
         return ListaSegnalazioni;
@@ -125,20 +130,22 @@ public class Sistema {
     public boolean verificaModificaSegnalazioni()
     {
         ArrayList<Segnalazione> NuovaListaSegnalazioni = new ArrayList<Segnalazione>();
-        Sistema sys = Sistema.getIstance();
+        Archivio sys = Archivio.getIstance();
         NuovaListaSegnalazioni.clear();
         NuovaListaSegnalazioni = (ArrayList<Segnalazione>) sys.getSegnalazioniCittadino(Cittadino.getId()).clone();
         int i;
-        //Log.d("myapp","Dim1: "+ ListaSegnalazioni.size() + "Dim2: " + NuovaListaSegnalazioni.size());
+        if(NuovaListaSegnalazioni.size()==ListaSegnalazioni.size()) {
+            for (i = 0; i < NuovaListaSegnalazioni.size(); i++) {
+                Log.d("myapp", "Dim1: " + NuovaListaSegnalazioni.get(i).getDataModifica().toString() + "Dim2: " + ListaSegnalazioni.get(i).getDataModifica().toString());
 
-        for(i=0;i<NuovaListaSegnalazioni.size();i++) {
-            //Log.d("myapp","(vecchia): "+ListaSegnalazioni.get(i).getDataModifica().toString() + "(nuova): "+NuovaListaSegnalazioni.get(i).getDataModifica().toString());
-
-            if (NuovaListaSegnalazioni.get(i).getDataModifica().compareTo(ListaSegnalazioni.get(i).getDataModifica()) != 0) {
-                ListaSegnalazioni= (ArrayList<Segnalazione>) NuovaListaSegnalazioni.clone();
-                return true;
+                if (NuovaListaSegnalazioni.get(i).getDataModifica().compareTo(ListaSegnalazioni.get(i).getDataModifica()) != 0) {
+                    ListaSegnalazioni = (ArrayList<Segnalazione>) NuovaListaSegnalazioni.clone();
+                    return true;
+                }
             }
         }
+        else
+            ListaSegnalazioni = (ArrayList<Segnalazione>) NuovaListaSegnalazioni.clone();
         return false;
     }
 

@@ -6,4 +6,5 @@ import com.google.android.gms.maps.model.LatLng;
 public interface VisualizzaView {
     void aggiungiRiga(TableRow TR);
     void apriMappa(LatLng Coordinate);
+    void mostraMessaggio(String Messaggio);
 }

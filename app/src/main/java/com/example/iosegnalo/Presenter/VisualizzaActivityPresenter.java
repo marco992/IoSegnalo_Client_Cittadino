@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 
 import com.example.iosegnalo.Model.Segnalazione;
-import com.example.iosegnalo.Model.Sistema;
+import com.example.iosegnalo.Model.Archivio;
 import com.example.iosegnalo.Model.Utente;
 import com.example.iosegnalo.R;
 import com.example.iosegnalo.View.VisualizzaView;
@@ -24,7 +24,7 @@ public class VisualizzaActivityPresenter {
     public VisualizzaActivityPresenter(VisualizzaView view)
     {
         View = view;
-        Sistema sys = Sistema.getIstance();
+        Archivio sys = Archivio.getIstance();
         Cittadino = sys.getUtente();
 
     }
@@ -32,7 +32,7 @@ public class VisualizzaActivityPresenter {
 
     public void creaTabella(Context contesto)
     {
-        Sistema sys = Sistema.getIstance();
+        Archivio sys = Archivio.getIstance();
 
         ArrayList<Segnalazione> Segnalazioni = (ArrayList<Segnalazione>) sys.getSegnalazioniCittadino(Cittadino.getId()).clone();
         if(Segnalazioni.isEmpty()==false) {
@@ -71,6 +71,16 @@ public class VisualizzaActivityPresenter {
                 tr.addView(Mappa);
                 //data ultima modifica
                 TextView DataModifica = new TextView(contesto);
+                DataModifica.setTag(Segnalazioni.get(i).getDescrizione());
+                DataModifica.setOnClickListener(new View.OnClickListener() {
+                    //facciamo un override del metodo onClick definito come interfaccia nella classe textview di android
+                    @Override
+                    public void onClick(View v) {
+                        //Log.v("myapps",v.getTag().toString());
+                        View.mostraMessaggio(v.getTag().toString());
+                    }
+
+                });
                 DataModifica.setText("    " + Segnalazioni.get(i).getDataModifica());
                 DataModifica.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
