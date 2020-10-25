@@ -12,7 +12,7 @@ import java.util.TimerTask;
 public class CittadinoActivityPresenter {
     CittadinoView View;
     Utente Cittadino;
-    ControllerNuoveSegnalazioni CS;
+    ControllerModificheSegnalazioni CS;
 
     public CittadinoActivityPresenter(CittadinoView view){
         View = view;
@@ -22,7 +22,7 @@ public class CittadinoActivityPresenter {
         View.setUsername(Cittadino.getUsername());
 
 
-        CS = new ControllerNuoveSegnalazioni();
+        CS = new ControllerModificheSegnalazioni();
         sys.updateListaSegnalazioni(Cittadino.getId());
 
 
@@ -37,7 +37,7 @@ public class CittadinoActivityPresenter {
         View.passaVisualizzaActivity();
     }
 
-    public class ControllerNuoveSegnalazioni extends TimerTask {
+    public class ControllerModificheSegnalazioni extends TimerTask {
         public void run() {
             Archivio sys = Archivio.getIstance();
             if(sys.verificaModificaSegnalazioni()==true)
