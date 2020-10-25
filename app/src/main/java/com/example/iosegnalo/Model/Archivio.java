@@ -144,7 +144,7 @@ public class Archivio {
                 }
             }
         }
-        
+
         else
             ListaSegnalazioni = (ArrayList<Segnalazione>) NuovaListaSegnalazioni.clone();
         return false;
